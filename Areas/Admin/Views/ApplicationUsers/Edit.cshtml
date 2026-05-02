@@ -1,0 +1,31 @@
+﻿@model ApplicationUser
+
+@{
+    ViewData["Title"] = "Редактирай потребител";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-warning fw-bold"><i class="bi bi-pencil-square"></i> @ViewData["Title"]</h2>
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="mb-3">
+            <label asp-for="FirstName" class="form-label">Първо име</label>
+            <input asp-for="FirstName" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="LastName" class="form-label">Фамилия</label>
+            <input asp-for="LastName" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Nickname" class="form-label">Псевдоним</label>
+            <input asp-for="Nickname" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">Имейл</label>
+            <input asp-for="Email" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-warning"><i class="bi bi-save"></i> Запиши</button>
+        <a asp-action="Index" class="btn btn-secondary">Назад</a>
+    </form>
+</div>

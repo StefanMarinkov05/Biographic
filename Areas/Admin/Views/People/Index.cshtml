@@ -1,0 +1,69 @@
+﻿@model IEnumerable<Biographic.Models.Person>
+
+@{
+    ViewData["Title"] = "Личности";
+}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-primary fw-bold"> 📜 Личности</h2>
+        <a asp-action="Create" class="btn btn-success shadow-sm"><i class="bi bi-plus-lg"></i>Добави нова личност</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle bg-white shadow rounded">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>Име</th>
+                    <th>Снимка</th>
+                    <th>Държава</th>
+                    <th>Професия</th>
+                    <th>Биография</th>
+                    <th>Години</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="text-center">
+                        <td class="fw-bold">@item.Name</td>
+                        <td>
+                            <img src="~/pictures/@item.ProfileImage?v=@Guid.NewGuid()"
+                                 alt="Снимка на @item.Name"
+                                 class="img-thumbnail shadow"
+                                 style="width: 100px; height: 100px; object-fit: contain;" />
+
+                        </td>
+                        <td>@item.Country?.Name</td>
+                        <td>@item.Profession?.Name</td>
+                        <td class="text-start">
+                            @string.Join(" ", item.Biography.Split(" ").Take(7))...
+                            <a asp-action="Details" asp-route-id="@item.Id" class="text-secondary text-decoration-none ms-2">
+                                Прочети повече
+                            </a>
+                        </td>
+                        <td>
+                            @item.StartDate.ToShortDateString()
+                            -
+                            @(item.IsDead ? item.EndDate?.ToShortDateString() : "Настояще")
+                        </td>
+                        <td>
+                            <div class="d-flex justify-content-center gap-2">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                                    ✏️ Редактирай
+                                </a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm text-white">
+                                    🔍 Детайли
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                    🗑️ Изтрий
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

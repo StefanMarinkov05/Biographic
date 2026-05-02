@@ -1,0 +1,126 @@
+﻿@using Microsoft.AspNetCore.Http
+@model List<Biographic.Models.PeopleCatalog>
+@{
+    ViewData["Title"] = "Моите каталози";
+    var showCreateWithPersonForm = Context.Request.Query.ContainsKey("personId");
+    var personName = ViewBag.PersonName as string;
+    var personId = Context.Request.Query["personId"].ToString();
+}
+
+<div class="container my-5">
+    <h2 class="text-center text-primary fw-bold mb-4">Моите каталози</h2>
+
+    @if (showCreateWithPersonForm && !string.IsNullOrEmpty(personName))
+    {
+        <div class="alert text-center fw-semibold">
+            <h3>Добавяте <span class="text-success">@personName</span> в избран каталог </h3>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted text-center">Все още нямате създадени каталози.</p>
+    }
+
+    <div class="row g-4">
+        @foreach (var catalog in Model)
+        {
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title text-primary fw-bold mb-0">
+                                📁 @catalog.Name
+                            </h5>
+                            <div class="d-flex gap-2 align-items-center">
+                                @* If there is a query ?personid={id} in the URL e.g. /User/PersonCatalogs?personid=7 *@
+                                @if (showCreateWithPersonForm)
+                                {
+                                    <form asp-action="AddPersonToCatalog" method="post" class="d-inline">
+                                        <input type="hidden" name="catalogId" value="@catalog.Id" />
+                                        <input type="hidden" name="personId" value="@personId" />
+                                        <button type="submit" class="btn btn-sm btn-success" title="Добави личността">
+                                            <i class="bi bi-bookmark-plus"></i>
+                                        </button>
+                                    </form>
+                                }
+
+                                <form asp-action="DeleteCatalog" method="post" asp-route-id="@catalog.Id" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Изтрий каталог">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+
+                                <form asp-action="EditCatalog" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@catalog.Id" />
+                                    <input type="text" name="newName" class="form-control form-control-sm d-inline w-auto" placeholder="Ново име" />
+                                    <button type="submit" class="btn btn-sm btn-warning">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        @if (!catalog.People.Any())
+                        {
+                            <p class="text-muted">Каталогът е празен.</p>
+                        }
+                        else
+                        {
+                            <ul class="list-group list-group-flush">
+                                @foreach (var person in catalog.People)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span>@person.Name</span>
+                                        <div class="btn-group">
+                                            <a asp-controller="People" asp-action="Details" asp-route-id="@person.Id" class="btn btn-sm btn-outline-secondary">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <form asp-action="RemovePersonFromCatalog" method="post" class="d-inline">
+                                                <input type="hidden" name="catalogId" value="@catalog.Id" />
+                                                <input type="hidden" name="personId" value="@person.Id" />
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Премахни">
+                                                    <i class="bi bi-x-circle"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <hr class="my-5" />
+
+    <h4 class="mb-3">Създай нов каталог</h4>
+    <form asp-action="CreateEmptyCatalog" method="post" class="row g-3">
+        <div class="col-md-6">
+            <input type="text" name="name" class="form-control" placeholder="Създай просто каталог..." required />
+        </div>
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-plus-circle"></i> Създай празен каталог
+            </button>
+        </div>
+    </form>
+
+    @* If there is a query ?personid={id} in the URL e.g. /User/PersonCatalogs?personid=7 *@
+    @if (showCreateWithPersonForm)
+    {
+        <form asp-action="CreateCatalogWithPerson" method="post" class="row g-3 mt-4">
+            <input type="hidden" name="personId" value="@personId" />
+            <div class="col-md-6">
+                <input type="text" name="name" class="form-control" placeholder="Създай каталог с личността..." required />
+            </div>
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-success w-100">
+                    <i class="bi bi-plus-square"></i> Създай и добави личност
+                </button>
+            </div>
+        </form>
+    }
+</div>

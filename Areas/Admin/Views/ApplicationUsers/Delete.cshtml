@@ -1,0 +1,37 @@
+﻿@model Biographic.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Изтриване на потребител";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center text-danger fw-bold">Изтриване на потребител</h2>
+        <h4 class="text-center text-muted">Сигурен ли си, че искаш да изтриеш <span class="fw-bold">@Model.Email</span>?</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4">№</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Id)</dd>
+
+            <dt class="col-sm-4">Първо име</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.FirstName)</dd>
+
+            <dt class="col-sm-4">Фамилия</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.LastName)</dd>
+
+            <dt class="col-sm-4">Псевдоним</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Nickname)</dd>
+
+            <dt class="col-sm-4">Имейл</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Email)</dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-danger">Изтрий</button>
+                <a asp-action="Index" class="btn btn-secondary">Върни се</a>
+            </div>
+        </form>
+    </div>
+</div>

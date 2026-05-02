@@ -1,0 +1,46 @@
+﻿@model Biographic.Models.Person
+
+@{
+    ViewData["Title"] = "Детайли";
+}
+
+<div class="container my-5">
+    <h1 class="text-center text-primary fw-bold mb-4">Детайли за @Model.Name</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="row g-0">
+                    <div class="col-md-4 text-center bg-light p-3">
+                        <img src="~/pictures/@Model.ProfileImage" class="img-fluid rounded" style="object-fit: contain; height: 250px; width: 100%;" alt="Профилна снимка">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <p><strong>Държава:</strong> @Model.Country?.Name</p>
+                            <p><strong>Професия:</strong> @Model.Profession?.Name</p>
+                            <p><strong>Биография:</strong> @Model.Biography</p>
+                            <p><strong>Години:</strong> @Model.StartDate.ToShortDateString() - @(Model.IsDead ? Model.EndDate?.ToShortDateString() : "Настояще")</p>
+
+                            <div class="mt-4 d-flex justify-content-between">
+                                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">
+                                    <i class="bi bi-pencil-fill"></i> Редактирай
+                                </a>
+
+                                <form asp-action="Delete" method="post" onsubmit="return confirm('Наистина ли искате да изтриете този запис?');">
+                                    <input type="hidden" name="id" value="@Model.Id" />
+                                    <button type="submit" class="btn btn-outline-danger">
+                                        <i class="bi bi-trash-fill"></i> Изтрий
+                                    </button>
+                                </form>
+
+                                <a asp-action="Index" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left-circle"></i> Назад към списъка
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

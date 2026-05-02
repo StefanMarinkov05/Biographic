@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"] - Biographic</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/Biographic.styles.css" asp-append-version="true">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+            <div class="container-fluid">                
+                <a class="navbar-brand fw-bold text-light" asp-area="User" asp-controller="People" asp-action="Index">
+                    <i class="bi bi-book-half"></i> Биографика
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarMenu" aria-controls="navbarMenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="offcanvas offcanvas-end text-light" tabindex="-1" id="navbarMenu">
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav mx-auto gap-3">
+                            <li class="nav-item">
+                                <a class="nav-link text-light fw-semibold" asp-area="User" asp-controller="Home" asp-action="Contacts">
+                                    <i class="bi bi-envelope"></i> Контакти
+                                </a>
+                            </li>
+                            @if (User.IsInRole(AddUsersInDB.ADMIN_ROLE))
+                            {
+                                <li class="nav-item"><a class="nav-link text-light" asp-area="Admin" asp-controller="ApplicationUsers" asp-action="Index"><i class="bi bi-people"></i> Потребители</a></li>
+                                <li class="nav-item"><a class="nav-link text-light" asp-area="Admin" asp-controller="People" asp-action="Index"><i class="bi bi-person-badge"></i> Личности</a></li>
+                                <li class="nav-item"><a class="nav-link text-light" asp-area="Admin" asp-controller="Countries" asp-action="Index"><i class="bi bi-globe"></i> Държави</a></li>
+                                <li class="nav-item"><a class="nav-link text-light" asp-area="Admin" asp-controller="Professions" asp-action="Index"><i class="bi bi-briefcase"></i> Професии</a></li>
+                            }
+                            <li class="nav-item">
+                                @if (!User.Identity.IsAuthenticated)
+                                {
+                                    <a class="nav-link text-light" asp-area="Identity" asp-controller="Account" asp-action="Login">
+                                        <i class="bi bi-list-ul"></i> Групи
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="nav-link text-light" asp-area="User" asp-controller="PeopleCatalogs" asp-action="Index">
+                                        <i class="bi bi-folder"></i> Групи
+                                    </a>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                 <div class="d-flex">
+                    @using Microsoft.AspNetCore.Identity
+                    @inject UserManager<ApplicationUser> UserManager
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        var user = await UserManager.GetUserAsync(User);
+                        <div class="d-flex align-items-center text-light me-3">
+                            <i class="bi bi-person-circle fs-5 me-1"></i> Здравей @(user?.Nickname ?? user?.Nickname)
+                        </div>
+                        <a class="btn btn-outline-light me-2" asp-area="Identity" asp-controller="Account" asp-action="Logout">
+                            <i class="bi bi-box-arrow-right"></i> Излез
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-outline-light me-2" asp-area="Identity" asp-controller="Account" asp-action="Login">
+                            <i class="bi bi-box-arrow-in-right"></i> Впиши се
+                        </a>
+                        <a class="btn btn-warning" asp-area="Identity" asp-controller="Account" asp-action="Register">
+                            <i class="bi bi-person-plus"></i> Регистрирай се
+                        </a>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

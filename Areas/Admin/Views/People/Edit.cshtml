@@ -1,0 +1,95 @@
+﻿@model Biographic.Models.Person
+
+@{
+    ViewData["Title"] = "Редактиране";
+}
+
+<div class="container my-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-body">
+            <h1 class="text-center text-primary fw-bold mb-4">Редактиране на личност</h1>
+
+            <div class="row">
+                <div class="col-md-4 text-center mb-4">
+                    <img src="~/pictures/@Model.ProfileImage?v=@Guid.NewGuid()"
+                         alt="Снимка на @Model.Name"
+                         class="img-thumbnail shadow"
+                         style="width: 100px; height: 100px; object-fit: contain;" />
+                    <p class="text-muted mt-2">Текуща снимка</p>
+                </div>
+
+                <div class="col-md-8">
+                    <form asp-action="Edit" enctype="multipart/form-data" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" name="OldImage" value="@Model.ProfileImage" />
+
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label fw-bold">Име</label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Нова снимка (по избор)</label>
+                            <input asp-for="ProfileImageFile" type="file" class="form-control" accept=".jpg" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CountryId" class="form-label fw-bold">Държава</label>
+                            <select asp-for="CountryId" class="form-select" asp-items="ViewBag.CountryId"></select>
+                            <span asp-validation-for="CountryId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ProfessionId" class="form-label fw-bold">Професия</label>
+                            <select asp-for="ProfessionId" class="form-select" asp-items="ViewBag.ProfessionId"></select>
+                            <span asp-validation-for="ProfessionId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Biography" class="form-label fw-bold">Биография</label>
+                            <textarea asp-for="Biography" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="Biography" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="StartDate" class="form-label fw-bold">Дата на раждане</label>
+                            <input asp-for="StartDate" class="form-control" type="date" />
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" asp-for="IsDead" />
+                            <label class="form-check-label fw-bold" asp-for="IsDead">
+                                Починал
+                            </label>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="EndDate" class="form-label fw-bold">Дата на смъртта (ако е починал)</label>
+                            <input asp-for="EndDate" class="form-control" type="date" />
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-center gap-3 mt-4">
+                            <button type="submit" class="btn btn-success px-4">
+                                <i class="bi bi-save2-fill"></i> Запази
+                            </button>
+
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                <i class="bi bi-arrow-left-circle"></i> Назад
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

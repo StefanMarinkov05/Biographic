@@ -1,0 +1,34 @@
+﻿@model ApplicationUser
+
+@{
+    ViewData["Title"] = "Създай потребител";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-primary fw-bold"><i class="bi bi-person-plus"></i> @ViewData["Title"]</h2>
+
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label asp-for="FirstName" class="form-label">Първо име</label>
+            <input asp-for="FirstName" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="LastName" class="form-label">Фамилия</label>
+            <input asp-for="LastName" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Nickname" class="form-label">Псевдоним</label>
+            <input asp-for="Nickname" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">Имейл</label>
+            <input asp-for="Email" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Парола</label>
+            <input name="password" type="password" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-success"><i class="bi bi-plus-circle"></i> Създай</button>
+        <a asp-action="Index" class="btn btn-secondary">Назад</a>
+    </form>
+</div>
